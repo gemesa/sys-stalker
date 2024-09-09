@@ -39,10 +39,32 @@ We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-st
 
 Now this would be way too easy. Target binaries are often obfuscated (using `dlopen`, calling syscalls directly, etc.). In such cases my preferred method is to use `strace` to get a quick high-level overview. The downside to `strace` is that the binary can detect if it is being traced.
 
-eBPF tracing can not be detected though so we can use a simple oneliner like this:
+eBPF tracing can not be detected though. First execute the target and stop it immediately (we do this to obtain its PID):
 
 ```
-$ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* /pid == 58715/ { printf("syscall: %s\n", probe); }'
+$ ./snitch & pid=$!; kill -STOP $pid
+[1] 50389
+                                                                                                                      
+[1]  + suspended (signal)  ./snitch
+```
+
+Then start tracing:
+
+```
+$ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* /pid == 50389/ { printf("syscall: %s\n", probe); }'
+Attaching 357 probes...
+```
+Resume the process:
+
+```
+$ kill -CONT 50389 && reptyr 50389
+PID: 50389
+...
+```
+Observe the syscalls in real-time:
+
+```
+$ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* /pid == 50389/ { printf("syscall: %s\n", probe); }'
 Attaching 357 probes...
 syscall: tracepoint:syscalls:sys_enter_newfstatat
 syscall: tracepoint:syscalls:sys_enter_access
