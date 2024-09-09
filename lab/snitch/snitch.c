@@ -47,23 +47,15 @@ void send_info(const char *hostname, const char *port, const char *data) {
 }
 
 int main() {
-    pid_t pid = getpid();
-
-    printf("PID: %d\n", pid);
-
-    sleep(10);
-
     struct utsname sys_info;
     if (uname(&sys_info) == -1) {
         perror("uname");
         exit(EXIT_FAILURE);
     }
 
-    pid = getpid();
+    pid_t pid = getpid();
 
     printf("PID: %d\n", pid);
-
-    printf("Sleeping for 10 seconds...\n");
 
     char info[256];
     snprintf(info, sizeof(info),
@@ -71,7 +63,7 @@ int main() {
              sys_info.sysname, sys_info.nodename, sys_info.release,
              sys_info.version, sys_info.machine, pid);
 
-    printf("Collected Info:\n%s", info);
+    printf("Collected info:\n%s", info);
 
     send_info("localhost", "8080", info);
 

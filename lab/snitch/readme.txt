@@ -1,6 +1,12 @@
 # 1. terminal
 $ gcc snitch.c -o snitch
-$ ./snitch
+$ ./snitch & pid=$!; kill -STOP $pid
+[1] 50389
+                                                                                                                      
+[1]  + suspended (signal)  ./snitch
+
+# run trace_snitch.py in an other terminal then:
+$ kill -CONT 50389 && reptyr 50389
 PID: 50389
 ...
 
