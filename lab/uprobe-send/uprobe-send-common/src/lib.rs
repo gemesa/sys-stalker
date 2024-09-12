@@ -4,4 +4,5 @@
 #[repr(C)]
 pub struct Buffer {
     pub len: u32,
+    pub data: [u8; 200]
 }

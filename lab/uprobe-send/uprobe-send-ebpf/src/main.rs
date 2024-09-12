@@ -7,7 +7,7 @@ use aya_ebpf::{
     maps::RingBuf,
 };
 use aya_log_ebpf::info;
-use aya_ebpf::helpers::bpf_get_current_pid_tgid;
+use aya_ebpf::helpers::{bpf_get_current_pid_tgid, bpf_probe_read_user_str_bytes};
 use uprobe_send_common::Buffer;
 
 #[map]
@@ -25,18 +25,21 @@ fn try_uprobe_send(ctx: ProbeContext) -> Result<u32, u32> {
     let pid_tgid = bpf_get_current_pid_tgid();
     let pid = (pid_tgid & 0xFFFFFFFF) as u32;
 
-    let filter_pid: u32 = 334096;
+    let filter_pid: u32 = 343071;
 
     if pid == filter_pid {
         info!(&ctx, "function send called by libc");
-        let len: u32 = ctx.arg(2).ok_or(0u32)?;
-        info!(&ctx, "len: {}", len);
-    
+   
+        let data_ptr: u64 = ctx.arg(1).ok_or(0u32)?;
+        let data_ptr = data_ptr as *const u8;
+
         match RING_BUF.reserve::<Buffer>(0) {
             Some(mut event) => {
                 let len: u32 = ctx.arg(2).ok_or(0u32)?;
                 unsafe {
-                    (*event.as_mut_ptr()).len = len;
+                    let ptr = event.as_mut_ptr();
+                    (*ptr).len = len;
+                    let _ = bpf_probe_read_user_str_bytes(data_ptr, &mut (*ptr).data);
                 }
                 event.submit(0);
             },

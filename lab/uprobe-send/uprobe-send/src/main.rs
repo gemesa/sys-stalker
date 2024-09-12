@@ -60,6 +60,14 @@ async fn main() -> Result<(), anyhow::Error> {
             info!("item: {:?}", &item);
             let buf: &Buffer = unsafe { &*(item.as_ptr() as *const Buffer) };
             info!("item.len: {}", buf.len);
+
+            let len = buf.len as usize;
+            if let Ok(str) = std::str::from_utf8(&buf.data[..len]) {
+                info!("item.data: {}", str);
+            }
+            else {
+                info!("item.data: invalid utf8");
+            }
         }
     }
 
