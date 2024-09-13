@@ -2,7 +2,7 @@ use aya::maps::RingBuf;
 use aya::programs::KProbe;
 use aya::{include_bytes_aligned, Bpf};
 use aya_log::BpfLogger;
-use log::{info, warn, debug};
+use log::{debug, info, warn};
 //use tokio::signal;
 
 use kprobe_sendto_common::Buffer;
@@ -57,8 +57,7 @@ async fn main() -> Result<(), anyhow::Error> {
             info!("item.data (raw): {:?}", buf.data);
             if let Ok(str) = std::str::from_utf8(&buf.data[..len]) {
                 info!("item.data (str): {}", str);
-            }
-            else {
+            } else {
                 info!("item.data: invalid utf8");
             }
         }
