@@ -4,7 +4,7 @@ use aya::{include_bytes_aligned, Bpf};
 use aya_log::BpfLogger;
 use clap::Parser;
 use log::{info, warn, debug};
-use tokio::signal;
+// use tokio::signal;
 
 use uprobe_send_common::Buffer;
 
@@ -51,7 +51,7 @@ async fn main() -> Result<(), anyhow::Error> {
     program.load()?;
     program.attach(Some("send"), 0, "libc", opt.pid)?;
 
-    let mut ring = RingBuf::try_from(bpf.map_mut("RING_BUF").unwrap())?;
+    let mut ring = RingBuf::try_from(bpf.map("RING_BUF").unwrap())?;
 
     info!("Waiting for Ctrl-C...");
 
