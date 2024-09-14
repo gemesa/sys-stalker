@@ -6,6 +6,9 @@ Detect and analyze malware using eBPF.
 
 ```
 $ sudo dnf install -y bcc bcc-tools bcc-devel python3-bcc bpftrace reptyr
+$ cargo install cargo-generate
+$ cargo install bindgen-cli
+$ cargo install --git https://github.com/aya-rs/aya -- aya-tool
 ```
 
 ## Workflow
