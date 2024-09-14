@@ -35,7 +35,7 @@ DYNAMIC SYMBOL TABLE:
 ...
 ```
 
-We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-stalker/blob/main/lab/snitch/trace_snitch.py#L73.
+We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-stalker/blob/main/lab/uprobe-send/uprobe-send/src/main.rs#L52 or https://github.com/gemesa/sys-stalker/blob/main/lab/snitch/trace_snitch.py#L73.
 
 Now this would be way too easy. Target binaries are often obfuscated (using `dlopen`, calling syscalls directly, etc.). In such cases my preferred method is to use `strace` to get a quick high-level overview. The downside to `strace` is that the binary can detect if it is being traced.
 
