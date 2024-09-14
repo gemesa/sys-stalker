@@ -2,15 +2,14 @@
 #![no_main]
 
 use aya_ebpf::{
+    bindings::path,
     macros::{lsm, map},
     programs::LsmContext,
     maps::RingBuf,
 };
 use aya_log_ebpf::info;
-use aya_ebpf::helpers::gen::bpf_probe_read_user;
+use aya_ebpf::helpers::bpf_d_path;
 use lsm_file_open_common::Buffer;
-
-use aya_ebpf_cty::c_void;
 
 mod vmlinux;
 
@@ -26,25 +25,15 @@ pub fn file_open(ctx: LsmContext) -> i32 {
 }
 
 fn try_file_open(ctx: LsmContext) -> Result<i32, i32> {
-    info!(&ctx, "lsm hook file_open called");
-
     let file: *const vmlinux::file = unsafe { ctx.arg(0) };
 
-    let file_ref = unsafe { &*file };
-
-    let dname = unsafe { (*file_ref.f_path.dentry).d_name };
-
-    let name = dname.name;
-
-    let mut len = unsafe { dname.__bindgen_anon_1.__bindgen_anon_1.len };
+    let path = unsafe { &(*file).f_path as *const _ as *mut path };
 
     match RING_BUF.reserve::<Buffer>(0) {
         Some(mut event) => {
+            let ptr = event.as_mut_ptr();
             unsafe {
-                let ptr = event.as_mut_ptr();
-                if len > 200 { len = 200 };
-                (*ptr).len = len;
-                let _ = bpf_probe_read_user((*ptr).data.as_ptr() as *mut c_void, len,  name as *const c_void);
+                bpf_d_path(path, (*ptr).data.as_mut_ptr() as *mut i8, (*ptr).data.len() as u32);
             }
             event.submit(0);
         },
