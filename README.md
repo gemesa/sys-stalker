@@ -140,3 +140,7 @@ LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
 - https://aya-rs.dev/book/
 - https://github.com/aya-rs/book/tree/main/examples
 - https://github.com/vadorovsky/aya-examples
+- https://github.com/iovisor/bcc/blob/master/docs/reference_guide.md
+- https://isovalent.com/books/learning-ebpf/
+- https://github.com/lizrice/learning-ebpf
+- https://eunomia.dev/tutorials/
