@@ -117,3 +117,20 @@ tracepoint:sunrpc:svc_xdr_sendto
 tracepoint:syscalls:sys_enter_sendto
 tracepoint:syscalls:sys_exit_sendto
 ```
+
+LSM hooks can be traced as well, see https://github.com/gemesa/sys-stalker/blob/main/lab/lsm-file-open/lsm-file-open/src/main.rs#L43
+
+The available LSM hooks and their arguments can be listed with:
+
+```
+$ uname -a
+Linux fedora 6.10.9-200.fc40.x86_64 #1 SMP PREEMPT_DYNAMIC Sun Sep  8 17:23:55 UTC 2024 x86_64 GNU/Linux
+$ grep LSM_HOOK\( /usr/src/kernels/6.10.9-200.fc40.x86_64/include/linux/lsm_hook_defs.h
+ *	LSM_HOOK(<return_type>, <default_value>, <hook_name>, args...)
+ *   #define LSM_HOOK(RET, DEFAULT, NAME, ...) struct hlist_head NAME;
+LSM_HOOK(int, 0, binder_set_context_mgr, const struct cred *mgr)
+LSM_HOOK(int, 0, binder_transaction, const struct cred *from,
+LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
+LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
+...
+```
