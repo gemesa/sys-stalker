@@ -134,3 +134,9 @@ LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
 LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
 ...
 ```
+
+## References
+
+- https://aya-rs.dev/book/
+- https://github.com/aya-rs/book/tree/main/examples
+- https://github.com/vadorovsky/aya-examples
