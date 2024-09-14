@@ -1,6 +1,6 @@
 # sys-stalker
 
-Detect and analyze malware using eBPF.
+A guide with examples for analyzing malware dynamically using eBPF.
 
 ## Prerequisites
 
