@@ -49,10 +49,11 @@ async fn main() -> Result<(), anyhow::Error> {
 
     loop {
         if let Some(item) = ring.next() {
-            info!("item: {:?}", &item);
             let buf: &Buffer = unsafe { &*(item.as_ptr() as *const Buffer) };
-            if let Ok(str) = std::str::from_utf8(&buf.data[..]) {
-                info!("item.data: {}", str);
+            if let Ok(str) = std::str::from_utf8(&buf.data[..buf.len]) {
+                if str == "/etc/passwd\0" {
+                    info!("item.data: {}", str);
+                }
             }
             else {
                 info!("item.data: invalid utf8");

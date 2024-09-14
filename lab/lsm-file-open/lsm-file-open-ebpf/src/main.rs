@@ -33,7 +33,13 @@ fn try_file_open(ctx: LsmContext) -> Result<i32, i32> {
         Some(mut event) => {
             let ptr = event.as_mut_ptr();
             unsafe {
-                bpf_d_path(path, (*ptr).data.as_mut_ptr() as *mut i8, (*ptr).data.len() as u32);
+                core::ptr::write_bytes((*ptr).data.as_mut_ptr(), 0, (*ptr).data.len());
+                let ret = bpf_d_path(path, (*ptr).data.as_mut_ptr() as *mut i8, (*ptr).data.len() as u32);
+                if ret < 0 {
+                    event.discard(0);
+                    return Err(ret as i32);
+                }
+                (*ptr).len = ret as usize;
             }
             event.submit(0);
         },
