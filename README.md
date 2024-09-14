@@ -75,4 +75,42 @@ syscall: tracepoint:syscalls:sys_enter_execve
 ...
 ```
 
-Once we see the list of the syscalls we can attach targeted probes to those we are interested in, see https://github.com/gemesa/sys-stalker/blob/main/lab/execve/trace_execve.py#L60.
+Once we see the list of the syscalls we can attach targeted probes to those we are interested in, see https://github.com/gemesa/sys-stalker/blob/main/lab/kprobe-sendto/kprobe-sendto/src/main.rs#L43 or https://github.com/gemesa/sys-stalker/blob/main/lab/execve/trace_execve.py#L60.
+
+The available probes can be listed with:
+
+```
+$ sudo bpftrace -l '*<your-symbol>*'
+```
+
+For example:
+
+```
+$ sudo bpftrace -l '*sendto*'
+kfunc:sunrpc:__probestub_rpc_xdr_sendto
+kfunc:sunrpc:__probestub_svc_xdr_sendto
+kfunc:sunrpc:__traceiter_rpc_xdr_sendto
+kfunc:sunrpc:__traceiter_svc_xdr_sendto
+kfunc:sunrpc:bc_sendto
+kfunc:sunrpc:svc_tcp_sendto
+kfunc:sunrpc:svc_udp_sendto
+kfunc:vmlinux:__ia32_sys_sendto
+kfunc:vmlinux:__sys_sendto
+kfunc:vmlinux:__x64_sys_sendto
+kprobe:__ia32_sys_sendto
+kprobe:__probestub_rpc_xdr_sendto
+kprobe:__probestub_svc_xdr_sendto
+kprobe:__sys_sendto
+kprobe:__traceiter_rpc_xdr_sendto
+kprobe:__traceiter_svc_xdr_sendto
+kprobe:__x64_sys_sendto
+kprobe:bc_sendto
+kprobe:svc_tcp_sendto
+kprobe:svc_udp_sendto
+rawtracepoint:rpc_xdr_sendto
+rawtracepoint:svc_xdr_sendto
+tracepoint:sunrpc:rpc_xdr_sendto
+tracepoint:sunrpc:svc_xdr_sendto
+tracepoint:syscalls:sys_enter_sendto
+tracepoint:syscalls:sys_exit_sendto
+```
