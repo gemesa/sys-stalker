@@ -144,3 +144,4 @@ LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
 - https://isovalent.com/books/learning-ebpf/
 - https://github.com/lizrice/learning-ebpf
 - https://eunomia.dev/tutorials/
+- https://syscall.sh/
