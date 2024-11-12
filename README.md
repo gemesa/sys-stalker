@@ -42,7 +42,7 @@ We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-st
 
 Now this would be way too easy. Target binaries are often obfuscated (using `dlopen`, calling syscalls directly, etc.). In such cases my preferred method is to use `strace` to get a quick high-level overview. The downside to `strace` is that the binary can detect if it is being traced.
 
-eBPF tracing can not be detected though. First execute the target and stop it immediately (we do this to obtain its PID):
+eBPF tracing cannot be detected easily though. First execute the target and stop it immediately (we do this to obtain its PID):
 
 ```
 $ ./snitch & pid=$!; kill -STOP $pid
