@@ -1,4 +1,4 @@
-# sys-stalker
+# sys-scout
 
 A guide with examples for analyzing malware dynamically using eBPF.
 
@@ -38,7 +38,7 @@ DYNAMIC SYMBOL TABLE:
 ...
 ```
 
-We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-stalker/blob/main/lab/uprobe-send/uprobe-send/src/main.rs#L52 or https://github.com/gemesa/sys-stalker/blob/main/lab/snitch/trace_snitch.py#L73.
+We can attach `uprobe`s to these functions, see https://github.com/gemesa/sys-scout/blob/main/lab/uprobe-send/uprobe-send/src/main.rs#L52 or https://github.com/gemesa/sys-scout/blob/main/lab/snitch/trace_snitch.py#L73.
 
 Now this would be way too easy. Target binaries are often obfuscated (using `dlopen`, calling syscalls directly, etc.). In such cases my preferred method is to use `strace` to get a quick high-level overview. The downside to `strace` is that the binary can detect if it is being traced.
 
@@ -78,7 +78,7 @@ syscall: tracepoint:syscalls:sys_enter_execve
 ...
 ```
 
-Once we see the list of the syscalls we can attach targeted probes to those we are interested in, see https://github.com/gemesa/sys-stalker/blob/main/lab/kprobe-sendto/kprobe-sendto/src/main.rs#L43 or https://github.com/gemesa/sys-stalker/blob/main/lab/execve/trace_execve.py#L60.
+Once we see the list of the syscalls we can attach targeted probes to those we are interested in, see https://github.com/gemesa/sys-scout/blob/main/lab/kprobe-sendto/kprobe-sendto/src/main.rs#L43 or https://github.com/gemesa/sys-scout/blob/main/lab/execve/trace_execve.py#L60.
 
 The available probes can be listed with:
 
@@ -118,7 +118,7 @@ tracepoint:syscalls:sys_enter_sendto
 tracepoint:syscalls:sys_exit_sendto
 ```
 
-LSM hooks can be traced as well, see https://github.com/gemesa/sys-stalker/blob/main/lab/lsm-file-open/lsm-file-open/src/main.rs#L43
+LSM hooks can be traced as well, see https://github.com/gemesa/sys-scout/blob/main/lab/lsm-file-open/lsm-file-open/src/main.rs#L43
 
 The available LSM hooks and their arguments can be listed with:
 
